@@ -28,16 +28,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      # npm Trusted Publishing(OIDC). 저장된 npm 토큰이 없습니다
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
-          registry-url: https://npm.pkg.github.com
+          registry-url: https://registry.npmjs.org
+      # Trusted Publishing 은 npm 11.5.1 이상이 필요합니다
+      - run: npm install -g npm@latest
       - run: npm ci
       # prepublishOnly 가 build 를 돌립니다
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

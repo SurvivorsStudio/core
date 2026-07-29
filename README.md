@@ -4,17 +4,15 @@ SurvivorsStudio 앱들이 공유하는 기능 패키지. Capacitor + Vite 앱에
 
 ## 설치
 
-앱 레포 루트에 `.npmrc` 가 있어야 합니다 (`app-template` 에 이미 포함):
-
-```
-@survivorsstudio:registry=https://npm.pkg.github.com
-```
-
 ```bash
 npm i @survivorsstudio/core
 ```
 
-> 이 패키지는 Public 이므로 설치에 인증이 필요하지 않습니다.
+인증도 `.npmrc` 도 필요 없습니다. npm 공개 레지스트리에 올라갑니다.
+
+> GitHub Packages 를 쓰지 않는 이유: `npm.pkg.github.com` 은 **공개 패키지도 토큰을 요구합니다**
+> ("You need an access token to publish, install, and delete private, internal, and public packages").
+> 팀원 4명이 각자 PAT 를 만들어 관리하는 마찰을 없애려고 npm 공개 레지스트리를 씁니다.
 
 ## 사용
 
@@ -60,6 +58,7 @@ Conventional Commits + [release-please](https://github.com/googleapis/release-pl
 
 - `fix:` → patch, `feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major
 - `main` 에 머지되면 봇이 릴리스 PR 을 만듭니다
-- 그 PR 을 머지하면 태그 · CHANGELOG · GitHub Packages publish 까지 자동
+- 그 PR 을 머지하면 태그 · CHANGELOG · npm publish 까지 자동
+- publish 는 npm Trusted Publishing(OIDC) 이라 저장된 토큰이 없습니다 — 만료·유출 관리 대상이 하나 줄어듭니다
 
 앱은 `^0.1.0` 캐럿 범위로 참조하고 `package-lock.json` 을 커밋합니다.
