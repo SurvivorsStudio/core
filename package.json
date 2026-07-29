@@ -1,0 +1,59 @@
+{
+  "name": "@survivorsstudio/core",
+  "version": "0.1.0",
+  "description": "SurvivorsStudio 앱 공통 기능 패키지",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SurvivorsStudio/core.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./storage": {
+      "types": "./dist/types/storage/index.d.ts",
+      "import": "./dist/storage.js"
+    },
+    "./audio": {
+      "types": "./dist/types/audio/index.d.ts",
+      "import": "./dist/audio.js"
+    },
+    "./analytics": {
+      "types": "./dist/types/analytics/index.d.ts",
+      "import": "./dist/analytics.js"
+    },
+    "./ui": {
+      "types": "./dist/types/ui/index.d.ts",
+      "import": "./dist/ui.js"
+    }
+  },
+  "scripts": {
+    "lint": "eslint src",
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/preferences": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/core": "^8.4.2",
+    "@capacitor/preferences": "^8.0.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vite": "^8.1.5"
+  }
+}
