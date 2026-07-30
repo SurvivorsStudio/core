@@ -23,12 +23,21 @@ import { track } from '@survivorsstudio/core/analytics';
 import { applySafeAreaVars } from '@survivorsstudio/core/ui';
 
 await Storage.set('highScore', '1200');
-const best = await Storage.get('highScore'); // '1200'
+const raw = await Storage.get('highScore');       // '1200' (문자열)
+
+// 숫자는 변환 없이 바로
+await Storage.setNumber('highScore', 1200);
+const best = await Storage.getNumber('highScore');   // 1200, 없으면 0
+const lives = await Storage.getNumber('lives', 3);   // 없으면 3
 ```
+
+`Preferences` 는 **문자열만 저장합니다.** 숫자를 다루려면 `Number(await get(k) ?? '0')` 왕복이
+필요한데, 최고점수·레벨·카운트를 저장하는 앱마다 반복되므로 `getNumber` / `setNumber` 가
+흡수합니다. 값이 없거나 숫자로 해석할 수 없으면(`''`, `'abc'`, `'Infinity'`) `fallback` 을 돌려줍니다.
 
 | 서브패스 | 지금 들어 있는 것 |
 |---|---|
-| `./storage` | `Storage` — get / set / remove (Capacitor Preferences) |
+| `./storage` | `Storage` — get / set / remove / **getNumber / setNumber** (Capacitor Preferences) |
 | `./audio` | `playTone(frequency, durationMs)` — 오디오 파일 없는 효과음 |
 | `./analytics` | `track(event, props?)` — 지금은 콘솔 출력 |
 | `./ui` | `applySafeAreaVars()` — 노치 영역을 CSS 변수로 |
