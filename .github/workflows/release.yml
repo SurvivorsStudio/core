@@ -16,10 +16,11 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
+      # release-please-config.json 과 .release-please-manifest.json 을 읽습니다.
+      # 매니페스트가 마지막 릴리스 버전(1.0.0)을 알려주므로, 태그가 없어도
+      # 다음 버전을 1.0.0 이 아니라 1.0.x / 1.1.0 으로 계산합니다.
       - uses: googleapis/release-please-action@v4
         id: release
-        with:
-          release-type: node
 
   publish:
     needs: release-please
