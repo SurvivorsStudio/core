@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/SurvivorsStudio/core/compare/core-v1.1.0...core-v1.2.0) (2026-07-31)
+
+
+### Features
+
+* **auth:** 구글 · Apple · 게스트 로그인 추가 ([1400575](https://github.com/SurvivorsStudio/core/commit/1400575fea4e61ba643c95f19d3bc5a94a74fd57))
+
 ## [1.1.0](https://github.com/SurvivorsStudio/core/compare/core-v1.0.0...core-v1.1.0) (2026-07-31)
 
 
