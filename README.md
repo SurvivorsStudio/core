@@ -21,6 +21,7 @@ import { Storage } from '@survivorsstudio/core/storage';
 import { playTone } from '@survivorsstudio/core/audio';
 import { track } from '@survivorsstudio/core/analytics';
 import { applySafeAreaVars } from '@survivorsstudio/core/ui';
+import { signInWithGoogle, signInWithApple, signInAsGuest } from '@survivorsstudio/core/auth';
 
 await Storage.set('highScore', '1200');
 const raw = await Storage.get('highScore');       // '1200' (문자열)
@@ -41,6 +42,37 @@ const lives = await Storage.getNumber('lives', 3);   // 없으면 3
 | `./audio` | `playTone(frequency, durationMs)` — 오디오 파일 없는 효과음 |
 | `./analytics` | `track(event, props?)` — 지금은 콘솔 출력 |
 | `./ui` | `applySafeAreaVars()` — 노치 영역을 CSS 변수로 |
+| `./auth` | 로그인 — 구글 / Apple / 게스트 (Firebase Auth) |
+
+## 로그인
+
+```ts
+import {
+  signInWithGoogle, signInWithApple, signInAsGuest,
+  linkGuestWithGoogle, linkGuestWithApple,
+  getCurrentUser, onAuthChange, isGuest, signOut,
+} from '@survivorsstudio/core/auth';
+
+const user = await signInAsGuest();          // 계정 없이 시작
+// 나중에 정식 계정으로 전환 — uid 가 유지되어 데이터가 이어집니다
+if (isGuest(user)) await linkGuestWithGoogle();
+
+const unsubscribe = await onAuthChange((user) => { ... });
+```
+
+**전제**: 앱이 시작할 때 `firebase/app` 의 `initializeApp(config)` 를 먼저 호출해야 합니다.
+`config` 는 앱마다 다른 Firebase 프로젝트 값이라 core 가 대신 할 수 없습니다 — 절차는
+`app-template` 의 `TEMPLATE.md` 를 참고하십시오.
+
+> ⚠️ **Apple 로그인은 유료 Apple Developer Program($99/년) 이 있어야 동작합니다.**
+> 무료 개인 계정(Personal Team)은 Sign In with Apple capability 자체를 못 켭니다. 그전까지는
+> `signInWithApple` / `linkGuestWithApple` 이 안내 메시지와 함께 실패하는 것이 정상입니다 —
+> [Apple Developer Forums](https://developer.apple.com/forums/thread/718473) 확인.
+> 구글 로그인·게스트 로그인은 이 제약이 없습니다.
+
+**게스트 → 정식 계정 전환이 가능한 이유**: Firebase 익명 인증(guest)은 나중에 구글/Apple 자격증명을
+연동(link)하면 같은 `uid` 를 유지합니다. 게스트로 쌓은 데이터가 그대로 이어집니다 — 완전 로컬
+전용 게스트 ID였다면 이 전환이 불가능했을 것입니다.
 
 ## 이 패키지가 의도적으로 비어 있는 이유
 
@@ -48,6 +80,11 @@ const lives = await Storage.getNumber('lives', 3);   // 없으면 3
 잘못된 추상화가 될 확률이 높습니다.
 
 **승격 기준: 같은 코드를 세 번째로 복붙하게 될 때.** 두 번째까지는 복붙이 더 쌉니다.
+
+> ⚠️ **`auth` 는 예외입니다.** 이 원칙은 "무엇이 공통인지 추측하지 말라"는 것이지, "항상 세 번
+> 기다리라"는 도그마가 아닙니다. 로그인(구글·Apple·게스트)은 앱 1개일 때부터 **모든 앱에
+> 필수라고 확정된 요구사항**이라 추측이 아닙니다. 확실한 요구사항을 세 번 복붙하게 두는 것은
+> 원칙을 지키는 게 아니라 오독하는 것입니다.
 
 ## 개발
 
@@ -58,8 +95,9 @@ npm run typecheck  # tsc --noEmit
 npm run build      # dist/ (ESM) + dist/types/ (.d.ts)
 ```
 
-`@capacitor/core` 와 `@capacitor/preferences` 는 peerDependency 입니다. 앱과 core 가 서로 다른
-버전의 Capacitor 를 끌어오면 네이티브 레이어에서 충돌하기 때문입니다.
+`@capacitor/core` · `@capacitor/preferences` · `@capacitor-firebase/authentication` · `firebase` 는
+전부 peerDependency 입니다. 앱과 core 가 서로 다른 버전을 끌어오면 네이티브 레이어에서 충돌하기
+때문입니다.
 
 ## 릴리스
 

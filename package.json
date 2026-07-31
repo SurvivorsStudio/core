@@ -36,6 +36,10 @@
     "./ui": {
       "types": "./dist/types/ui/index.d.ts",
       "import": "./dist/ui.js"
+    },
+    "./auth": {
+      "types": "./dist/types/auth/index.d.ts",
+      "import": "./dist/auth.js"
     }
   },
   "scripts": {
@@ -46,11 +50,15 @@
   },
   "peerDependencies": {
     "@capacitor/core": "^8.0.0",
-    "@capacitor/preferences": "^8.0.0"
+    "@capacitor/preferences": "^8.0.0",
+    "@capacitor-firebase/authentication": "^8.3.0",
+    "firebase": "^12.6.0"
   },
   "devDependencies": {
     "@capacitor/core": "^8.4.2",
     "@capacitor/preferences": "^8.0.1",
+    "@capacitor-firebase/authentication": "^8.3.0",
+    "firebase": "^12.17.0",
     "@eslint/js": "^10.0.1",
     "eslint": "^10.8.0",
     "typescript": "^6.0.3",

@@ -10,13 +10,14 @@ export default defineConfig({
         audio: 'src/audio/index.ts',
         analytics: 'src/analytics/index.ts',
         ui: 'src/ui/index.ts',
+        auth: 'src/auth/index.ts',
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
     },
     rollupOptions: {
-      // Capacitor 플러그인은 앱 쪽 것을 그대로 쓴다 (peerDependency)
-      external: [/^@capacitor\//],
+      // Capacitor 플러그인과 firebase 는 앱 쪽 것을 그대로 쓴다 (peerDependency)
+      external: [/^@capacitor\//, /^@capacitor-firebase\//, /^firebase/],
     },
   },
 });
