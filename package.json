@@ -1,6 +1,6 @@
 {
   "name": "@survivorsstudio/core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "SurvivorsStudio 앱 공통 기능 패키지",
   "type": "module",
   "license": "MIT",
